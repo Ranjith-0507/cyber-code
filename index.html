@@ -97,54 +97,6 @@
       </div>
     </div>
 
-    <script>
-      const socket = io("http://localhost:5000");
-      const recognition = new (window.SpeechRecognition ||
-        window.webkitSpeechRecognition)();
-      const inputArea = document.getElementById("input-area");
-      const outputArea = document.getElementById("output-area");
-
-      recognition.continuous = false;
-      recognition.lang = "en-US";
-      recognition.interimResults = false;
-
-      document.getElementById("record").onclick = () => {
-        recognition.start();
-        inputArea.textContent = "Listening...";
-      };
-
-      document.getElementById("stop").onclick = () => {
-        recognition.stop();
-        inputArea.textContent = "Stopped listening.";
-      };
-
-      recognition.onresult = (event) => {
-        const transcript =
-          event.results[event.results.length - 1][0].transcript;
-        inputArea.textContent = "You said: " + transcript;
-        socket.emit("start_chat", { message: transcript });
-      };
-
-      recognition.onerror = (event) => {
-        inputArea.textContent = "Error: " + event.error;
-      };
-
-      socket.on("chat_response", (data) => {
-        outputArea.textContent = data.message;
-        speak(data.message);
-      });
-
-      function speak(text) {
-        if ("speechSynthesis" in window) {
-          const utterance = new SpeechSynthesisUtterance(text);
-          window.speechSynthesis.speak(utterance);
-        }
-      }
-
-      function startChat() {
-        recognition.start();
-        inputArea.textContent = "Listening...";
-      }
-    </script>
+    
   </body>
 </html>
